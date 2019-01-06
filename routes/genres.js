@@ -20,9 +20,9 @@ router.post('/', async (req, res) => {
     return res.status(400).send(errorMessage)
   }
 
-  let genre = new Genre({ name: req.body.name })
+  const genre = new Genre({ name: req.body.name })
 
-  genre = await genre.save()
+  await genre.save()
 
   return res.send(genre)
 })
