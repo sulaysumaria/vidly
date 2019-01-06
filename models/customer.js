@@ -41,4 +41,5 @@ const Customer = mongoose.model('customer', customerSchema)
 module.exports = {
   Customer,
   validateCustomer,
+  customerSchema,
 }
