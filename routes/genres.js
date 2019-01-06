@@ -77,14 +77,14 @@ router.get('/:id', async (req, res) => {
   return res.send(genre)
 })
 
-function validateGenre(course) {
+function validateGenre(genre) {
   const schema = {
     name: Joi.string()
       .min(3)
       .required(),
   }
 
-  return Joi.validate(course, schema)
+  return Joi.validate(genre, schema)
 }
 
 module.exports = router
