@@ -7,7 +7,10 @@ const customers = require('./routes/customers')
 const app = express()
 
 mongoose
-  .connect('mongodb://localhost/vidly')
+  .connect(
+    'mongodb://localhost/vidly',
+    { useNewUrlParser: true },
+  )
   .then(() => console.log('Connected to mongodb.'))
   .catch(() => console.log('Could not connect to mongodb.'))
 
