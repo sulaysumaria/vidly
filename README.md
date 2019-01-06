@@ -1,3 +1,3 @@
 # vidly
 
-Backend Service for Imaginary Rental Service Vidly
+Backend Service for Imaginary Video Rental Service Vidly
