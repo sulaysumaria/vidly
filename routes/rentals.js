@@ -2,6 +2,8 @@ const express = require('express')
 const Fawn = require('fawn')
 const mongoose = require('mongoose')
 
+const { auth } = require('./../middleware/auth')
+
 const { Movie } = require('./../models/movie')
 const { Customer } = require('./../models/customer')
 const { Rental, validateRental } = require('./../models/rental')
@@ -16,7 +18,7 @@ router.get('/', async (req, res) => {
   return res.send(rentals)
 })
 
-router.post('/', async (req, res) => {
+router.post('/', auth, async (req, res) => {
   const { error } = validateRental(req.body)
 
   if (error) {
