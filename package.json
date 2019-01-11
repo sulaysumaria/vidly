@@ -4,7 +4,7 @@
   "description": "Backend Service for Imaginary Video Rental Service Vidly",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest --watchAll"
   },
   "author": "Sulay Sumaria",
   "license": "ISC",
@@ -21,5 +21,7 @@
     "mongoose": "^5.4.3",
     "winston": "^3.1.0"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "jest": "^23.6.0"
+  }
 }
