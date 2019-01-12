@@ -1,6 +1,7 @@
 const express = require('express')
 
 const { auth } = require('./../middleware/auth')
+const { validateObjectId } = require('./../middleware/validateObjectId')
 
 const { Genre } = require('./../models/genre')
 const { Movie, validateMovie } = require('./../models/movie')
@@ -41,7 +42,7 @@ router.post('/', auth, async (req, res) => {
   return res.send(movie)
 })
 
-router.put('/:id', auth, async (req, res) => {
+router.put('/:id', [auth, validateObjectId], async (req, res) => {
   const { error } = validateMovie(req.body)
 
   if (error) {
@@ -75,7 +76,7 @@ router.put('/:id', auth, async (req, res) => {
   return res.send(movie)
 })
 
-router.delete('/:id', auth, async (req, res) => {
+router.delete('/:id', [auth, validateObjectId], async (req, res) => {
   const movie = await Movie.findByIdAndRemove(req.params.id)
 
   if (!movie) {
@@ -85,7 +86,7 @@ router.delete('/:id', auth, async (req, res) => {
   return res.send(movie)
 })
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', validateObjectId, async (req, res) => {
   const movie = await Movie.findById(req.params.id)
 
   if (!movie) {
