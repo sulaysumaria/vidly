@@ -8,6 +8,7 @@ require('./startup/config').checkConfig()
 require('./startup/logging').logging()
 require('./startup/db').db()
 require('./startup/routes').routes(app)
+require('./startup/prod').prod(app)
 
 const port = process.env.PORT || 3000
 
