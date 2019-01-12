@@ -11,10 +11,12 @@ require('./startup/routes').routes(app)
 
 const port = process.env.PORT || 3000
 
-const server = app.listen(port, () => {
-  winston.info(`Listening on port ${port}.`)
-})
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(port, () => {
+    winston.info(`Listening on port ${port}.`)
+  })
+}
 
 module.exports = {
-  server,
+  server: app,
 }

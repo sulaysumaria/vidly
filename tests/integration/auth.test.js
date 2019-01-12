@@ -13,7 +13,6 @@ describe('auth middleware', () => {
 
   afterEach(async () => {
     await Genre.remove({})
-    server.close()
   })
 
   let token

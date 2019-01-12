@@ -11,7 +11,10 @@ function logging() {
   })
 
   winston.add(new winston.transports.File({ filename: 'logfile.log', handleExceptions: true }))
-  winston.add(new winston.transports.Console({ colorize: true, prettyPrint: true }))
+
+  if (process.env.NODE_ENV !== 'test') {
+    winston.add(new winston.transports.Console({ colorize: true, prettyPrint: true }))
+  }
 }
 
 module.exports = {

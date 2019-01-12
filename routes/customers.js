@@ -2,6 +2,7 @@ const express = require('express')
 
 const { auth } = require('./../middleware/auth')
 const { validateObjectId } = require('./../middleware/validateObjectId')
+const { validate } = require('./../middleware/validate')
 
 const { Customer, validateCustomer } = require('./../models/customer')
 
@@ -13,16 +14,7 @@ router.get('/', async (req, res) => {
   return res.send(customers)
 })
 
-router.post('/', auth, async (req, res) => {
-  const { error } = validateCustomer(req.body)
-
-  if (error) {
-    let errorMessage = ''
-    error.details.map(d => (errorMessage += d.message))
-
-    return res.status(400).send(errorMessage)
-  }
-
+router.post('/', [auth, validate(validateCustomer)], async (req, res) => {
   const customer = new Customer({ name: req.body.name, phone: req.body.phone, isGold: req.body.isGold })
 
   await customer.save()
@@ -30,16 +22,7 @@ router.post('/', auth, async (req, res) => {
   return res.send(customer)
 })
 
-router.put('/:id', [auth, validateObjectId], async (req, res) => {
-  const { error } = validateCustomer(req.body)
-
-  if (error) {
-    let errorMessage = ''
-    error.details.map(d => (errorMessage += d.message))
-
-    return res.status(400).send(errorMessage)
-  }
-
+router.put('/:id', [auth, validateObjectId, validate(validateCustomer)], async (req, res) => {
   const customer = await Customer.findByIdAndUpdate(
     req.params.id,
     { name: req.body.name, phone: req.body.phone, isGold: req.body.isGold },

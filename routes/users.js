@@ -3,6 +3,7 @@ const _ = require('lodash')
 const bcrypt = require('bcrypt')
 
 const { auth } = require('./../middleware/auth')
+const { validate } = require('./../middleware/validate')
 
 const { User, validateUser } = require('./../models/user')
 
@@ -14,16 +15,7 @@ router.get('/me', auth, async (req, res) => {
   return res.send(user)
 })
 
-router.post('/', async (req, res) => {
-  const { error } = validateUser(req.body)
-
-  if (error) {
-    let errorMessage = ''
-    error.details.map(d => (errorMessage += d.message))
-
-    return res.status(400).send(errorMessage)
-  }
-
+router.post('/', validate(validateUser), async (req, res) => {
   let user = await User.findOne({ email: req.body.email })
 
   if (user) {

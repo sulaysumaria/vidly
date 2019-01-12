@@ -2,6 +2,7 @@ const express = require('express')
 
 const { auth } = require('./../middleware/auth')
 const { validateObjectId } = require('./../middleware/validateObjectId')
+const { validate } = require('./../middleware/validate')
 
 const { Genre } = require('./../models/genre')
 const { Movie, validateMovie } = require('./../models/movie')
@@ -14,16 +15,7 @@ router.get('/', async (req, res) => {
   return res.send(movies)
 })
 
-router.post('/', auth, async (req, res) => {
-  const { error } = validateMovie(req.body)
-
-  if (error) {
-    let errorMessage = ''
-    error.details.map(d => (errorMessage += d.message))
-
-    return res.status(400).send(errorMessage)
-  }
-
+router.post('/', [auth, validate(validateMovie)], async (req, res) => {
   const genre = await Genre.findById(req.body.genreId)
 
   if (!genre) {
@@ -42,16 +34,7 @@ router.post('/', auth, async (req, res) => {
   return res.send(movie)
 })
 
-router.put('/:id', [auth, validateObjectId], async (req, res) => {
-  const { error } = validateMovie(req.body)
-
-  if (error) {
-    let errorMessage = ''
-    error.details.map(d => (errorMessage += d.message))
-
-    return res.status(400).send(errorMessage)
-  }
-
+router.put('/:id', [auth, validateObjectId, validate(validateMovie)], async (req, res) => {
   const genre = await Genre.findById(req.body.genreId)
 
   if (!genre) {

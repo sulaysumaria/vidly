@@ -2,20 +2,13 @@ const express = require('express')
 const bcrypt = require('bcrypt')
 const Joi = require('joi')
 
+const { validate } = require('./../middleware/validate')
+
 const { User } = require('./../models/user')
 
 const router = express.Router()
 
-router.post('/', async (req, res) => {
-  const { error } = validate(req.body)
-
-  if (error) {
-    let errorMessage = ''
-    error.details.map(d => (errorMessage += d.message))
-
-    return res.status(400).send(errorMessage)
-  }
-
+router.post('/', [validate(validateBody)], async (req, res) => {
   let user = await User.findOne({ email: req.body.email })
 
   if (!user) {
@@ -33,7 +26,7 @@ router.post('/', async (req, res) => {
   return res.send(token)
 })
 
-function validate(req) {
+function validateBody(req) {
   const schema = {
     email: Joi.string()
       .min(5)

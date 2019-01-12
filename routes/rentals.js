@@ -3,6 +3,7 @@ const Fawn = require('fawn')
 const mongoose = require('mongoose')
 
 const { auth } = require('./../middleware/auth')
+const { validate } = require('./../middleware/validate')
 
 const { Movie } = require('./../models/movie')
 const { Customer } = require('./../models/customer')
@@ -18,16 +19,7 @@ router.get('/', async (req, res) => {
   return res.send(rentals)
 })
 
-router.post('/', auth, async (req, res) => {
-  const { error } = validateRental(req.body)
-
-  if (error) {
-    let errorMessage = ''
-    error.details.map(d => (errorMessage += d.message))
-
-    return res.status(400).send(errorMessage)
-  }
-
+router.post('/', [auth, validate(validateRental)], async (req, res) => {
   const customer = await Customer.findById(req.body.customerId)
 
   if (!customer) {
